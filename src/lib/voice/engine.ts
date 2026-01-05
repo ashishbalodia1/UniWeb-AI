@@ -3,7 +3,14 @@
  * Supports multiple providers: ElevenLabs, Azure, OpenAI
  */
 
-import { VoiceProfile, VoiceSettings, EmotionType } from '@/types';
+import { VoiceProfile, VoiceSettings } from '@/types';
+
+// Web Speech API type declarations
+declare global {
+  interface Window {
+    webkitSpeechRecognition: typeof SpeechRecognition;
+  }
+}
 
 export interface TTSRequest {
   text: string;
@@ -109,7 +116,7 @@ export class ElevenLabsProvider extends VoiceProvider {
 
       const data = await response.json();
 
-      return data.voices.map((voice: any) => ({
+      return data.voices.map((voice: { voice_id: string; name: string }) => ({
         id: voice.voice_id,
         name: voice.name,
         provider: 'elevenlabs' as const,
@@ -282,13 +289,13 @@ export class WebSpeechProvider extends VoiceProvider {
         return;
       }
 
-      // @ts-ignore - webkit prefix
+      // @ts-expect-error - webkit prefix
       const recognition = new webkitSpeechRecognition();
       recognition.continuous = false;
       recognition.interimResults = false;
       recognition.lang = request.language || 'en-US';
 
-      recognition.onresult = (event: any) => {
+      recognition.onresult = (event: SpeechRecognitionEvent) => {
         const result = event.results[0][0];
         resolve({
           text: result.transcript,
@@ -297,7 +304,7 @@ export class WebSpeechProvider extends VoiceProvider {
         });
       };
 
-      recognition.onerror = (error: any) => {
+      recognition.onerror = (error: SpeechRecognitionErrorEvent) => {
         reject(error);
       };
 
