@@ -11,7 +11,7 @@ import { motion } from 'framer-motion';
  * Premium glassmorphism design
  */
 export default function Header() {
-  const { setCurrentMode, toggleCommandPalette } = useUIStore();
+  const { currentMode, setCurrentMode, toggleCommandPalette } = useUIStore();
   const { status, currentTask } = useAIStore();
 
   const getStatusIcon = () => {
