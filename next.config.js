@@ -9,9 +9,9 @@ const nextConfig = {
     formats: ['image/avif', 'image/webp'],
   },
   
-  // Experimental features
+  // Experimental features - disable optimizeCss to avoid critters module error
   experimental: {
-    optimizeCss: true,
+    optimizeCss: false,
   },
   
   // Environment variables
