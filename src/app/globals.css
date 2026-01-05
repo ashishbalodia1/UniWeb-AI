@@ -1,0 +1,234 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ==================== CUSTOM FONTS ==================== */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&display=swap');
+
+/* ==================== BASE STYLES ==================== */
+@layer base {
+  * {
+    @apply border-neutral-200;
+  }
+
+  html {
+    @apply scroll-smooth;
+  }
+
+  body {
+    @apply bg-neutral-50 text-neutral-900;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    @apply w-2 h-2;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-neutral-100;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-neutral-300 rounded-full hover:bg-neutral-400;
+  }
+}
+
+/* ==================== COMPONENT STYLES ==================== */
+@layer components {
+  /* Glass morphism effect */
+  .glass {
+    @apply bg-white/80 backdrop-blur-xl border border-white/20 shadow-xl;
+  }
+
+  .glass-dark {
+    @apply bg-neutral-900/80 backdrop-blur-xl border border-neutral-800/20 shadow-xl;
+  }
+
+  /* Premium buttons */
+  .btn-primary {
+    @apply rounded-xl bg-primary-600 px-6 py-3 text-sm font-medium text-white shadow-lg 
+           transition-all duration-300 hover:bg-primary-700 hover:shadow-xl 
+           active:scale-95 disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .btn-secondary {
+    @apply rounded-xl border border-neutral-300 bg-white px-6 py-3 text-sm font-medium 
+           text-neutral-700 shadow-sm transition-all duration-300 hover:border-neutral-400 
+           hover:shadow-md active:scale-95;
+  }
+
+  .btn-ghost {
+    @apply rounded-xl px-6 py-3 text-sm font-medium text-neutral-700 transition-all 
+           duration-300 hover:bg-neutral-100 active:scale-95;
+  }
+
+  /* Input fields */
+  .input-primary {
+    @apply w-full rounded-xl border border-neutral-300 bg-white px-4 py-3 text-sm 
+           transition-all duration-300 placeholder:text-neutral-400 
+           focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20;
+  }
+
+  /* Cards */
+  .card {
+    @apply rounded-2xl bg-white p-6 shadow-sm transition-all duration-300 hover:shadow-md;
+  }
+
+  .card-interactive {
+    @apply card cursor-pointer hover:-translate-y-1 hover:shadow-xl;
+  }
+
+  /* Gradients */
+  .gradient-primary {
+    @apply bg-gradient-to-r from-primary-600 to-accent-600;
+  }
+
+  .gradient-text {
+    @apply bg-gradient-to-r from-primary-600 to-accent-600 bg-clip-text text-transparent;
+  }
+
+  /* Chat message bubble */
+  .message-user {
+    @apply rounded-2xl rounded-tr-sm bg-primary-600 px-4 py-3 text-white;
+  }
+
+  .message-assistant {
+    @apply rounded-2xl rounded-tl-sm bg-white px-4 py-3 text-neutral-900 shadow-sm;
+  }
+
+  /* Animations */
+  .animate-in {
+    @apply animate-fade-in;
+  }
+
+  .animate-slide-up {
+    @apply animate-slide-up;
+  }
+}
+
+/* ==================== UTILITIES ==================== */
+@layer utilities {
+  /* Text gradients */
+  .text-gradient {
+    @apply bg-gradient-to-r from-primary-600 to-accent-600 bg-clip-text text-transparent;
+  }
+
+  /* Premium glow effects */
+  .glow-primary {
+    box-shadow: 0 0 40px rgba(14, 165, 233, 0.4);
+  }
+
+  .glow-accent {
+    box-shadow: 0 0 40px rgba(168, 85, 247, 0.4);
+  }
+
+  /* Blur effects */
+  .blur-backdrop {
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+
+  /* Safe area insets for mobile */
+  .safe-top {
+    padding-top: env(safe-area-inset-top);
+  }
+
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* ==================== CUSTOM ANIMATIONS ==================== */
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.shimmer {
+  animation: shimmer 2s infinite linear;
+  background: linear-gradient(to right, transparent 0%, rgba(255, 255, 255, 0.3) 50%, transparent 100%);
+  background-size: 1000px 100%;
+}
+
+/* Thinking dots animation */
+@keyframes thinking-dots {
+  0%, 20% {
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.2;
+  }
+}
+
+.thinking-dot {
+  animation: thinking-dots 1.4s infinite;
+}
+
+.thinking-dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.thinking-dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+/* Pulse glow effect */
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(14, 165, 233, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(14, 165, 233, 0.6);
+  }
+}
+
+.pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Avatar speaking animation */
+@keyframes avatar-speaking {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.avatar-speaking {
+  animation: avatar-speaking 0.3s ease-in-out infinite;
+}
+
+/* ==================== RESPONSIVE UTILITIES ==================== */
+@media (max-width: 640px) {
+  .mobile-hide {
+    @apply hidden;
+  }
+}
+
+@media (min-width: 641px) {
+  .mobile-only {
+    @apply hidden;
+  }
+}
+
+/* ==================== DARK MODE (FUTURE) ==================== */
+@media (prefers-color-scheme: dark) {
+  /* Dark mode styles will be implemented here */
+}
+
+/* ==================== PRINT STYLES ==================== */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}
