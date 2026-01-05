@@ -74,7 +74,7 @@ export default function WelcomeScreen({ onStart }: WelcomeScreenProps) {
           transition={{ delay: 0.4 }}
           className="mb-12 text-xl text-neutral-600"
         >
-          The world's most advanced all-in-one AI platform
+          The world&apos;s most advanced all-in-one AI platform
           <br />
           Chat • Voice • Avatar • Analysis — Unified in one beautiful interface
         </motion.p>

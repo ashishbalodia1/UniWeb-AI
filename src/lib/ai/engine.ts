@@ -158,7 +158,7 @@ export class OpenAIProvider extends AIProvider {
                 onChunk({ type: 'text', data: content, index, done: false });
                 index++;
               }
-            } catch (e) {
+            } catch {
               // Skip invalid JSON
             }
           }
@@ -269,8 +269,8 @@ export class AnthropicProvider extends AIProvider {
   }
 
   async streamChat(
-    request: ChatCompletionRequest,
-    onChunk: (chunk: StreamChunk) => void
+    _request: ChatCompletionRequest,
+    _onChunk: (chunk: StreamChunk) => void
   ): Promise<void> {
     // Similar implementation to OpenAI with Anthropic's streaming format
     throw new Error('Streaming not yet implemented for Anthropic');
