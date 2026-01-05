@@ -6,7 +6,7 @@
 'use client';
 
 import { useState, useCallback, useRef } from 'react';
-import { VoiceEngine } from './engine';
+import { VoiceEngine } from '@/lib/voice/engine';
 import { VoiceProfile, VoiceSettings } from '@/types';
 import { VOICE_DEFAULTS } from '@/config';
 

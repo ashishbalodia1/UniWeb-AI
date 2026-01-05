@@ -47,8 +47,9 @@ export class ChatService {
         
         await AIEngine.streamChat(this.defaultProvider, request, (chunk) => {
           if (chunk.type === 'text' && !chunk.done) {
-            content += chunk.data;
-            onStream(chunk.data);
+            const textData = chunk.data as string;
+            content += textData;
+            onStream(textData);
           }
         });
 

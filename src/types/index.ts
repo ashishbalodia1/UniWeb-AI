@@ -155,7 +155,7 @@ export interface VoiceProfile {
   isCustom: boolean;
 }
 
-export type VoiceProvider = 'elevenlabs' | 'azure' | 'google' | 'openai' | 'custom';
+export type VoiceProvider = 'elevenlabs' | 'azure' | 'google' | 'openai' | 'browser' | 'custom';
 
 export type EmotionType =
   | 'neutral'

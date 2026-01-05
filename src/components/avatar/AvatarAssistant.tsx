@@ -1,10 +1,10 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAIStore } from '@/store/aiStore';
 import { useUIStore } from '@/store/uiStore';
-import { X, Minimize2, Maximize2 } from 'lucide-react';
+import { X, Minimize2 } from 'lucide-react';
 
 /**
  * AvatarAssistant - Floating AI avatar with animations

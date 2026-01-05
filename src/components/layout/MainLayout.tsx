@@ -15,7 +15,7 @@ interface MainLayoutProps {
  * Glassmorphism design with smooth transitions
  */
 export default function MainLayout({ children }: MainLayoutProps) {
-  const { sidebarOpen, commandPaletteOpen } = useUIStore();
+  const { commandPaletteOpen } = useUIStore();
 
   return (
     <div className="flex h-screen w-full overflow-hidden bg-gradient-to-br from-neutral-50 via-primary-50/20 to-accent-50/20">

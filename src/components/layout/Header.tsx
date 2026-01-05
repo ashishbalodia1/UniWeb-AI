@@ -2,7 +2,7 @@
 
 import { useUIStore } from '@/store/uiStore';
 import { useAIStore } from '@/store/aiStore';
-import { WORKSPACE_MODES, AI_PERSONALITIES } from '@/config';
+import { WORKSPACE_MODES } from '@/config';
 import { Command, Mic, Video, Brain, Zap } from 'lucide-react';
 import { motion } from 'framer-motion';
 

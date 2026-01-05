@@ -6,9 +6,43 @@
 import { VoiceProfile, VoiceSettings } from '@/types';
 
 // Web Speech API type declarations
+interface SpeechRecognitionResultItem {
+  transcript: string;
+  confidence: number;
+}
+
+interface SpeechRecognitionResult {
+  [index: number]: SpeechRecognitionResultItem;
+  length: number;
+}
+
+interface SpeechRecognitionResultList {
+  [index: number]: SpeechRecognitionResult;
+  length: number;
+}
+
+interface SpeechRecognitionEventInterface {
+  results: SpeechRecognitionResultList;
+}
+
+interface SpeechRecognitionErrorEventInterface {
+  error: string;
+  message: string;
+}
+
+interface SpeechRecognitionInterface {
+  continuous: boolean;
+  interimResults: boolean;
+  lang: string;
+  onresult: ((event: SpeechRecognitionEventInterface) => void) | null;
+  onerror: ((event: SpeechRecognitionErrorEventInterface) => void) | null;
+  start: () => void;
+  stop: () => void;
+}
+
 declare global {
   interface Window {
-    webkitSpeechRecognition: typeof SpeechRecognition;
+    webkitSpeechRecognition: new () => SpeechRecognitionInterface;
   }
 }
 
@@ -295,7 +329,7 @@ export class WebSpeechProvider extends VoiceProvider {
       recognition.interimResults = false;
       recognition.lang = request.language || 'en-US';
 
-      recognition.onresult = (event: SpeechRecognitionEvent) => {
+      recognition.onresult = (event: SpeechRecognitionEventInterface) => {
         const result = event.results[0][0];
         resolve({
           text: result.transcript,
@@ -304,7 +338,7 @@ export class WebSpeechProvider extends VoiceProvider {
         });
       };
 
-      recognition.onerror = (error: SpeechRecognitionErrorEvent) => {
+      recognition.onerror = (error: SpeechRecognitionErrorEventInterface) => {
         reject(error);
       };
 

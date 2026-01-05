@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import { useUIStore } from '@/store/uiStore';
 import {
   MessageSquare,
@@ -19,7 +18,7 @@ import { motion, AnimatePresence } from 'framer-motion';
  * Premium feel with smooth animations
  */
 export default function Sidebar() {
-  const { sidebarOpen, toggleSidebar, currentMode } = useUIStore();
+  const { sidebarOpen, toggleSidebar } = useUIStore();
 
   const menuItems = [
     { icon: MessageSquare, label: 'Chat', active: true },
