@@ -47,12 +47,9 @@ export function initializeAIEngine(): void {
     isInitialized = true;
     console.log('[AI Engine] Initialized with providers:', Object.keys(configs).join(', '));
   } else {
-    console.log('[AI Engine] Running in DEMO MODE - No API keys configured');
-    console.log('[AI Engine] Add OPENAI_API_KEY to enable real AI responses');
-    // Demo mode - will use fallback responses
+    console.warn('[AI Engine] No API keys configured. AI features will not work.');
+    console.warn('[AI Engine] Please set OPENAI_API_KEY or ANTHROPIC_API_KEY in your environment.');
   }
-  
-  isInitialized = true;
 }
 
 /**
