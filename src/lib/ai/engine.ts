@@ -268,8 +268,10 @@ export class AnthropicProvider extends AIProvider {
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async streamChat(
     _request: ChatCompletionRequest,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     _onChunk: (chunk: StreamChunk) => void
   ): Promise<void> {
     // Similar implementation to OpenAI with Anthropic's streaming format

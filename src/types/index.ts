@@ -140,7 +140,9 @@ export interface VoiceSettings {
   voice: VoiceProfile;
   speed: number; // 0.5 - 2.0
   pitch: number; // 0.5 - 2.0
+  volume: number; // 0.0 - 1.0
   emotion: EmotionType;
+  language?: string; // Optional override language
   autoPlay: boolean;
   noiseSuppressionEnabled: boolean;
 }

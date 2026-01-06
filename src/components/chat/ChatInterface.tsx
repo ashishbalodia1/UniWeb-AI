@@ -6,17 +6,27 @@ import { Send, Paperclip, Mic, Square } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import MessageList from './MessageList';
 import TypingIndicator from './TypingIndicator';
+import { sendStreamingChatMessage } from '@/lib/chatClient';
+import { nanoid } from 'nanoid';
 
 /**
  * ChatInterface - Main conversation UI
- * Handles message input, display, and interactions
+ * Handles message input, display, and interactions with real AI backend
  */
 export default function ChatInterface() {
   const [input, setInput] = useState('');
   const [isRecording, setIsRecording] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  const { messages, addMessage, status, setStatus } = useAIStore();
+  const { 
+    messages, 
+    addMessage, 
+    status, 
+    setStatus, 
+    appendToLastMessage, 
+    currentPersonality,
+    setError 
+  } = useAIStore();
 
   // Auto-resize textarea
   useEffect(() => {
@@ -27,35 +37,70 @@ export default function ChatInterface() {
   }, [input]);
 
   const handleSend = async () => {
-    if (!input.trim()) return;
-
-    // Add user message
-    addMessage({
-      role: 'user',
-      content: input.trim(),
-      type: 'text',
-      metadata: {},
-    });
+    if (!input.trim() || status === 'thinking') return;
 
     const userMessage = input.trim();
     setInput('');
 
-    // Simulate AI response
+    // Add user message
+    addMessage({
+      role: 'user',
+      content: userMessage,
+      type: 'text',
+      metadata: {},
+    });
+
+    // Set AI thinking state
     setStatus('thinking', 'Processing your request...');
 
-    // TODO: Replace with actual AI API call
-    setTimeout(() => {
-      addMessage({
-        role: 'assistant',
-        content: `I received your message: "${userMessage}". This is a placeholder response. The AI engine will be connected next.`,
-        type: 'text',
-        metadata: {
-          model: 'gpt-4-turbo',
-          latency: 1200,
+    // Create placeholder for assistant message
+    addMessage({
+      role: 'assistant',
+      content: '',
+      type: 'text',
+      metadata: {},
+    });
+
+    try {
+      // Call streaming API
+      await sendStreamingChatMessage(
+        messages.concat([{
+          id: nanoid(),
+          role: 'user',
+          content: userMessage,
+          type: 'text',
+          metadata: {},
+          timestamp: new Date(),
+        }]),
+        {
+          onStart: () => {
+            setStatus('thinking', 'AI is responding...');
+          },
+          onChunk: (chunk: string) => {
+            appendToLastMessage(chunk);
+          },
+          onComplete: () => {
+            setStatus('idle');
+          },
+          onError: (error: Error) => {
+            setError(error.message);
+            // Replace empty assistant message with error message
+            addMessage({
+              role: 'assistant',
+              content: `I apologize, but I encountered an error: ${error.message}. Please try again.`,
+              type: 'text',
+              metadata: {},
+            });
+            setStatus('idle');
+          },
         },
-      });
+        currentPersonality
+      );
+    } catch (error) {
+      console.error('[ChatInterface] Send error:', error);
+      setError('Failed to send message');
       setStatus('idle');
-    }, 2000);
+    }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {

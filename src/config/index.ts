@@ -196,7 +196,9 @@ export const PERFORMANCE_CONFIG = {
 export const VOICE_DEFAULTS = {
   speed: 1.0,
   pitch: 1.0,
+  volume: 1.0,
   emotion: 'neutral' as const,
+  language: 'en-US',
   autoPlay: false,
   noiseSuppressionEnabled: true,
 };

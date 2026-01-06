@@ -48,10 +48,15 @@ export function useVoice(settings: VoiceSettings = VOICE_DEFAULTS as VoiceSettin
         const response = await VoiceEngine.textToSpeech(text, voiceProfile, settings);
 
         if (settings.autoPlay) {
-          await VoiceEngine.playAudio(response);
+          await VoiceEngine.playAudio(response, text);
         }
       } catch (error) {
         console.error('Speech synthesis error:', error);
+        // Try fallback browser TTS
+        if ('speechSynthesis' in window && text) {
+          const utterance = new SpeechSynthesisUtterance(text);
+          window.speechSynthesis.speak(utterance);
+        }
       } finally {
         setIsPlaying(false);
       }
@@ -96,7 +101,7 @@ export function useVoice(settings: VoiceSettings = VOICE_DEFAULTS as VoiceSettin
       mediaRecorder.onstop = async () => {
         try {
           const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
-          const result = await VoiceEngine.speechToText(audioBlob);
+          const result = await VoiceEngine.speechToText(audioBlob, settings.language || 'en-US');
           
           setTranscript(result.text);
           setIsRecording(false);
@@ -107,13 +112,14 @@ export function useVoice(settings: VoiceSettings = VOICE_DEFAULTS as VoiceSettin
           resolve(result.text);
         } catch (error) {
           console.error('Speech recognition error:', error);
+          setIsRecording(false);
           reject(error);
         }
       };
 
       mediaRecorder.stop();
     });
-  }, []);
+  }, [settings.language]);
 
   return {
     isPlaying,
