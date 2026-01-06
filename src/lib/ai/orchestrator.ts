@@ -13,6 +13,7 @@
 
 import { Message, AIPersonality } from '@/types';
 import { ChatService, SendMessageOptions } from './chatService';
+import { demoProvider } from './demoProvider';
 
 export interface OrchestratorRequest {
   type: 'chat' | 'analysis' | 'voice' | 'completion';
@@ -75,6 +76,38 @@ class AIOrchestrator {
     options: SendMessageOptions = {}
   ): Promise<OrchestratorResponse> {
     try {
+      // Check if we have API keys configured
+      const hasApiKey = process.env.OPENAI_API_KEY && 
+                        process.env.OPENAI_API_KEY !== 'your_openai_key_here';
+      
+      if (!hasApiKey) {
+        // Use demo mode
+        const response = await demoProvider.generateResponse(messages);
+        const demoMessage: Message = {
+          id: `demo-${Date.now()}`,
+          role: 'assistant',
+          content: response,
+          type: 'text',
+          metadata: {
+            model: 'demo-mode',
+            isDemo: true,
+          },
+          timestamp: new Date(),
+        };
+        
+        return {
+          success: true,
+          data: {
+            message: demoMessage,
+            metadata: {
+              timestamp: new Date().toISOString(),
+              personality: options.personality || 'teacher',
+              demoMode: true,
+            },
+          },
+        };
+      }
+
       const message = await this.chatService.sendMessage(messages, options);
 
       return {
@@ -103,6 +136,23 @@ class AIOrchestrator {
   ): Promise<void> {
     try {
       callbacks.onStart?.();
+
+      // Check if we have API keys configured
+      const hasApiKey = process.env.OPENAI_API_KEY && 
+                        process.env.OPENAI_API_KEY !== 'your_openai_key_here';
+      
+      if (!hasApiKey) {
+        // Use demo streaming mode
+        let fullContent = '';
+        
+        for await (const chunk of demoProvider.streamResponse(messages)) {
+          fullContent += chunk;
+          callbacks.onChunk?.(chunk);
+        }
+        
+        callbacks.onComplete?.(fullContent);
+        return;
+      }
 
       let fullContent = '';
 
